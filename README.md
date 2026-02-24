@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-markdown
 # 🤖 Telegram Bot with Voice Features
 
 A Telegram bot with voice message support using local AI models. The bot can recognize speech, generate responses using local LLMs, and respond with voice or text.
@@ -283,7 +281,3 @@ For questions, suggestions, or issues:
 * Implement rate limiting
 * Add more comprehensive tests
 * Made with ❤️ for the Telegram bot community
-=======
-# ai_voice_assistent_with_mem
-A Telegram bot with voice message support using local AI models.
->>>>>>> 1e4f3d33f52bdd6ea0eaa6c956277c39ae83f317
