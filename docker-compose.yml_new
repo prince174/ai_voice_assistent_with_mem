@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: ai_bot_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWD}
+      POSTGRES_DB: ${POSTGRES_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ai_bot_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  bot:
+    build: 
+      context: .
+      args:
+        - USERNAME=botuser
+        - USER_UID=1000
+        - USER_GID=1000
+    container_name: ai_bot
+    environment:
+      # Telegram
+      - BOT_TOKEN=${BOT_TOKEN}
+      # PostgreSQL
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWD=${POSTGRES_PASSWD}
+      # LLM
+      - MODEL_NAME=${MODEL_NAME}
+      # Voice
+      - VOICE_ENABLED=${VOICE_ENABLED}
+      - WHISPER_MODEL=${WHISPER_MODEL}
+      - MAX_HISTORY=${MAX_HISTORY}
+    volumes:
+      # Монтируем только необходимые папки
+      - ./logs:/app/logs
+      - ./temp:/app/temp
+      # Не монтируем код в продакшене!
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - ai_bot_network
+    security_opt:
+      - no-new-privileges:true
+    read_only: true  # Read-only root filesystem
+    tmpfs:
+      - /tmp  # Временная файловая система в памяти
+
+volumes:
+  postgres_data:
+    name: ai_bot_postgres_data
+
+networks:
+  ai_bot_network:
+    name: ai_bot_network

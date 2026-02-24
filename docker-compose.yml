@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: ai_bot_postgres
+    environment:
+      POSTGRES_NAME: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWD: ${POSTGRES_PASSWD}
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ai_bot_network
+
+volumes:
+  postgres_data:
+    name: ai_bot_postgres_data
+
+networks:
+  ai_bot_network:
+    name: ai_bot_network

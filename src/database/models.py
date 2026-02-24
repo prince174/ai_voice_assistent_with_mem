@@ -1,0 +1,20 @@
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Optional
+
+@dataclass
+class User:
+    user_id: int
+    username: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    created_at: datetime
+
+@dataclass
+class Message:
+    id: int
+    user_id: int
+    role: str  # 'user' or 'assistant'
+    content: str
+    model: Optional[str]
+    created_at: datetime
