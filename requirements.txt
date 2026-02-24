@@ -1,0 +1,9 @@
+ollama>=0.1.5
+python-telegram-bot>=20.0
+asyncpg>=0.29.0
+faster-whisper>=1.0.0
+pydub>=0.25.1
+edge-tts>=6.0.0
+python-dotenv>=1.0.0
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
